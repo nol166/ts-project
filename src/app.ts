@@ -48,13 +48,39 @@ class ProjectInput {
         this.attach()
     }
 
+    private clearInput() {
+        this.titleInput.value = ''
+        this.descriptionInput.value = ''
+        this.peopleInput.value = ''
+    }
+
+    private getUserInput(): [string, string, number] | void {
+        const title = this.titleInput.value
+        const description = this.descriptionInput.value
+        const people = this.peopleInput.value
+
+        if (
+            title.trim().length === 0 ||
+            description.trim().length === 0 ||
+            people.trim().length === 0
+        ) {
+            alert('you must enter something')
+            return
+        } else {
+            return [title, description, +people]
+        }
+    }
+
     @autoBind
     private submitHandler(e: Event) {
         // get values
         e.preventDefault()
-        let titleVal = this.titleInput.value
-        console.log('ProjectInput -> submitHandler -> titleVal', titleVal)
-
+        const userInput = this.getUserInput()
+        if (Array.isArray(userInput)) {
+            const [title, description, people] = userInput
+            console.log(title, description, people)
+        }
+        this.clearInput()
         // validate them
     }
 
