@@ -58,7 +58,7 @@ class ProjectInput {
         const title = this.titleInput.value
         const description = this.descriptionInput.value
         const people = this.peopleInput.value
-
+        // TODO: make validation better
         if (
             title.trim().length === 0 ||
             description.trim().length === 0 ||
