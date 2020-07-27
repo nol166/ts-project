@@ -5,6 +5,34 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+function validate(validatableInput) {
+    let isValid = true;
+    if (validatableInput.required) {
+        isValid =
+            isValid && validatableInput.value.toString().trim().length !== 0;
+    }
+    if (validatableInput.minLength != null &&
+        typeof validatableInput.value === 'string') {
+        isValid =
+            isValid &&
+                validatableInput.value.length >= validatableInput.minLength;
+    }
+    if (validatableInput.maxLength != null &&
+        typeof validatableInput.value === 'string') {
+        isValid =
+            isValid &&
+                validatableInput.value.length <= validatableInput.maxLength;
+    }
+    if (validatableInput.min != null &&
+        typeof validatableInput.value === 'number') {
+        isValid = isValid && validatableInput.value >= validatableInput.min;
+    }
+    if (validatableInput.max != null &&
+        typeof validatableInput.value === 'number') {
+        isValid = isValid && validatableInput.value <= validatableInput.max;
+    }
+    return isValid;
+}
 const autoBind = (_target, _methodName, descriptor) => {
     const originalMethod = descriptor.value;
     const adjDescriptor = {
@@ -38,9 +66,24 @@ class ProjectInput {
         const title = this.titleInput.value;
         const description = this.descriptionInput.value;
         const people = this.peopleInput.value;
-        if (title.trim().length === 0 ||
-            description.trim().length === 0 ||
-            people.trim().length === 0) {
+        const titleValidatable = {
+            value: title,
+            required: true,
+        };
+        const descriptionValidatable = {
+            value: description,
+            required: true,
+            min: 5,
+        };
+        const peopleValidatable = {
+            value: +people,
+            required: true,
+            min: 1,
+            max: 5,
+        };
+        if (!validate(titleValidatable) &&
+            !validate(descriptionValidatable) &&
+            !validate(peopleValidatable)) {
             alert('you must enter something');
             return;
         }
